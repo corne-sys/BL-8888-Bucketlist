@@ -48,6 +48,11 @@ export default function Footer() {
                   Mijn Avonturen
                 </Link>
               </li>
+              <li>
+                <Link href="/overzicht" className="hover:text-gold transition-colors">
+                  Volledig Overzicht
+                </Link>
+              </li>
             </ul>
           </div>
 

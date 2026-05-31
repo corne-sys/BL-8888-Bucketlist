@@ -28,6 +28,7 @@ export default function Navbar() {
     { name: 'Landen', href: '/landen' },
     { name: 'Plaatsen', href: '/plaatsen' },
     { name: 'Avonturen', href: '/avonturen' },
+    { name: 'Overzicht', href: '/overzicht' },
   ];
 
   const isActive = (path: string) => pathname === path;

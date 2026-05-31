@@ -12,7 +12,13 @@ export async function generateMetadata() {
   };
 }
 
-export default async function AdventuresPage() {
+interface Props {
+  searchParams: Promise<{ slug?: string }>;
+}
+
+export default async function AdventuresPage({ searchParams }: Props) {
+  const { slug } = await searchParams;
+
   // Query all bucket list items belonging to the 'Avontuur' category/lifeArea
   const adventures = await prisma.bucketlistItem.findMany({
     where: {
@@ -45,7 +51,7 @@ export default async function AdventuresPage() {
         position: index + 1,
         name: adv.title,
         description: adv.shortDescription,
-        url: `http://localhost:3000/avonturen`, // All adventures are interactive directly on this page
+        url: `http://localhost:3000/avonturen?slug=${adv.slug}`,
       })),
     },
   };
@@ -53,7 +59,7 @@ export default async function AdventuresPage() {
   return (
     <>
       <SchemaOrg schema={listSchema} />
-      <AdventuresClient initialAdventures={adventures} />
+      <AdventuresClient initialAdventures={adventures} activeSlug={slug} />
     </>
   );
 }

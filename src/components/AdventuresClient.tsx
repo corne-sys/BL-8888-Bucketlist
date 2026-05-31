@@ -29,11 +29,32 @@ interface Adventure {
 
 interface AdventuresClientProps {
   initialAdventures: Adventure[];
+  activeSlug?: string;
 }
 
-export default function AdventuresClient({ initialAdventures }: AdventuresClientProps) {
+export default function AdventuresClient({ initialAdventures, activeSlug }: AdventuresClientProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [activeModalAdventure, setActiveModalAdventure] = useState<Adventure | null>(null);
+  const [prevActiveSlug, setPrevActiveSlug] = useState<string | undefined>(activeSlug);
+  const [activeModalAdventure, setActiveModalAdventure] = useState<Adventure | null>(
+    activeSlug ? initialAdventures.find(a => a.slug === activeSlug) || null : null
+  );
+
+  if (activeSlug !== prevActiveSlug) {
+    setPrevActiveSlug(activeSlug);
+    setActiveModalAdventure(activeSlug ? initialAdventures.find(a => a.slug === activeSlug) || null : null);
+  }
+
+  const handleCloseModal = () => {
+    setActiveModalAdventure(null);
+    if (window.location.search) {
+      window.history.pushState({}, '', '/avonturen');
+    }
+  };
+
+  const handleOpenAdventure = (adv: Adventure) => {
+    setActiveModalAdventure(adv);
+    window.history.pushState({}, '', `/avonturen?slug=${adv.slug}`);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -103,7 +124,7 @@ export default function AdventuresClient({ initialAdventures }: AdventuresClient
               <motion.div
                 layout
                 key={adv.id}
-                onClick={() => setActiveModalAdventure(adv)}
+                onClick={() => handleOpenAdventure(adv)}
                 className="group flex flex-col bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
               >
                 {/* Photo Area */}
@@ -165,7 +186,7 @@ export default function AdventuresClient({ initialAdventures }: AdventuresClient
             {initialAdventures.map((adv) => (
               <div
                 key={adv.id}
-                onClick={() => setActiveModalAdventure(adv)}
+                onClick={() => handleOpenAdventure(adv)}
                 className="group bg-white border border-primary/5 hover:border-gold/30 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col space-y-3 cursor-pointer"
               >
                 {/* Top Meta Row */}
@@ -218,7 +239,7 @@ export default function AdventuresClient({ initialAdventures }: AdventuresClient
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActiveModalAdventure(null)}
+              onClick={handleCloseModal}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
 
@@ -231,7 +252,7 @@ export default function AdventuresClient({ initialAdventures }: AdventuresClient
             >
               {/* Close Button */}
               <button
-                onClick={() => setActiveModalAdventure(null)}
+                onClick={handleCloseModal}
                 className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 text-white hover:text-gold flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Sluiten"
               >
@@ -323,7 +344,7 @@ export default function AdventuresClient({ initialAdventures }: AdventuresClient
                     </span>
                   </div>
                   <button
-                    onClick={() => setActiveModalAdventure(null)}
+                    onClick={handleCloseModal}
                     className="w-full sm:w-auto text-center bg-transparent border border-white/20 hover:border-[#D4AF37] hover:text-[#D4AF37] px-6 py-2.5 rounded-xl font-bold transition-colors cursor-pointer text-xs uppercase tracking-wider"
                   >
                     Sluiten
