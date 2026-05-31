@@ -1,26 +1,99 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F9F6F0; /* Warm zand / beige */
+  --foreground: #0B192C; /* Diep nachtblauw */
+  
+  --primary: #0B192C;
+  --sand: #F9F6F0;
+  --gold: #D4AF37;
+  --orange: #FF9F43;
+  --green: #27AE60;
+  --card-bg: #FFFFFF;
+  --card-border: rgba(11, 25, 44, 0.08);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark mode utility blocks, such as headers, hero banners, dark sections, and the admin panel */
+.dark-theme {
+  --background: #0B192C;
+  --foreground: #F4F2EE;
+  --card-bg: #112240;
+  --card-border: rgba(212, 175, 55, 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-primary: #0B192C;
+  --color-sand: #F9F6F0;
+  --color-gold: #D4AF37;
+  --color-orange: #FF9F43;
+  --color-emerald-green: #27AE60;
+  --color-dark-card: #112240;
+  
+  --font-sans: var(--font-outfit), var(--font-inter), system-ui, -apple-system, sans-serif;
+  --radius-xl: 12px;
+  --radius-2xl: 18px;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Premium modern scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 5px;
+  border: 3px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF9F43;
+}
+
+/* Custom interactive UI classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark-theme .glass-panel {
+  background: rgba(17, 34, 64, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* Accessibility focus state */
+*:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 4px;
+}
+
+/* Text Selection */
+::selection {
+  background-color: #D4AF37;
+  color: #0B192C;
+}
+
+/* Breadcrumb SEO separation character spacing */
+.breadcrumb-separator::after {
+  content: "/";
+  margin: 0 0.5rem;
+  color: #D4AF37;
+  font-weight: 300;
 }

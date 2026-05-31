@@ -1,0 +1,135 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id               String           @id @default(uuid())
+  name             String
+  slug             String           @unique
+  shortDescription String
+  longDescription  String
+  icon             String           // Lucide icon name
+  image            String           // Image path/URL
+  seoTitle         String?
+  seoDescription   String?
+  status           String           @default("actief") // actief / inactief
+  sortOrder        Int              @default(0)
+  items            BucketlistItem[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model Country {
+  id                 String           @id @default(uuid())
+  name               String
+  slug               String           @unique
+  continent          String
+  shortDescription   String
+  longDescription    String
+  visitReason        String           // Waarom dit land bezoeken?
+  bestTravelTime     String           // Beste reistijd
+  personalMotivation String           // Persoonlijke motivatie
+  image              String
+  status             String           @default("nog_te_bezoeken") // nog_te_bezoeken / gepland / bezocht
+  seoTitle           String?
+  seoDescription     String?
+  geoKeywords        String?          // Komma-gescheiden
+  places             Place[]
+  items              BucketlistItem[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model Place {
+  id                 String           @id @default(uuid())
+  name               String
+  slug               String           @unique
+  countryId          String
+  country            Country          @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  type               String           // stad, dorp, natuurgebied, historische_plek, etc.
+  shortDescription   String
+  longDescription    String
+  whyVisit           String           // Waarom bezoeken?
+  whatToDo           String           // Wat wil ik daar doen?
+  bestTravelTime     String
+  practicalTips      String
+  image              String
+  status             String           @default("nog_te_bezoeken") // nog_te_bezoeken / gepland / bezocht
+  seoTitle           String?
+  seoDescription     String?
+  geoKeywords        String?
+  items              BucketlistItem[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model BucketlistItem {
+  id                 String           @id @default(uuid())
+  title              String
+  slug               String           @unique
+  shortDescription   String
+  longDescription    String
+  personalMotivation String
+  whyOnList          String           // Waarom op mijn bucketlist?
+  experienceGoal     String           // Wat wil ik ervaren/leren?
+  image              String
+  status             String           @default("nog_te_doen") // nog_te_doen / gepland / gedaan
+  priority           String           @default("gemiddeld") // hoog / gemiddeld / laag
+  dateAdded          DateTime         @default(now())
+  plannedDate        DateTime?
+  completedDate      DateTime?
+  notes              String?
+  isFeatured         Boolean          @default(false)
+  reflectionBefore   String?          // Vooraf reflectie
+  reflectionAfter    String?          // Achteraf reflectie
+  reflectionLesson   String?          // Geleerde les
+  lifeArea           String           // Groei, Avontuur, Gezondheid, Relaties, Bijdrage, Vrijheid, Creativiteit
+  countryId          String?
+  country            Country?         @relation(fields: [countryId], references: [id], onDelete: SetNull)
+  placeId            String?
+  place              Place?           @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  categories         Category[]
+  seoTitle           String?
+  seoDescription     String?
+  geoKeywords        String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model Media {
+  id          String   @id @default(uuid())
+  filename    String
+  altText     String
+  title       String?
+  description String?
+  filepath    String   // Local path like /uploads/filename.jpg
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Setting {
+  id                     String   @id @default("global")
+  websiteName            String   @default("Mijn Bucket List")
+  introText              String   @default("Welkom op mijn persoonlijke levenskaart...")
+  heroTitle              String   @default("Mijn Bucket List")
+  heroSubtitle           String   @default("Steden, landen, ervaringen en doelen die mij inspireren...")
+  defaultSeoTitle        String   @default("Mijn Persoonlijke Bucketlist")
+  defaultSeoDescription  String   @default("Ontdek de bestemmingen, doelen en ervaringen op mijn levensreis.")
+  socialShareImage       String   @default("/images/default-share.jpg")
+  email                  String?
+  footerText             String   @default("© 2026 Mijn Bucket List. Dromen, ontdekken, groeien.")
+  updatedAt              DateTime @updatedAt
+}
