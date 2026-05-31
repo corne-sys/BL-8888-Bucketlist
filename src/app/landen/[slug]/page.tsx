@@ -198,7 +198,7 @@ export default async function CountryDetailPage({ params }: Props) {
                   Persoonlijke Motivatie
                 </h3>
                 <p className="text-xs text-primary/80 font-medium leading-relaxed italic">
-                  "{country.personalMotivation}"
+                  &quot;{country.personalMotivation}&quot;
                 </p>
               </div>
             </div>
@@ -285,7 +285,7 @@ export default async function CountryDetailPage({ params }: Props) {
                   <div className="space-y-1 border-t border-primary/5 pt-3">
                     <h4 className="text-sm font-bold text-primary flex items-start gap-1.5">
                       <span className="text-gold font-black">Q:</span>
-                      Welke regio's of trefwoorden zijn gekoppeld aan deze droom?
+                      Welke regio&apos;s of trefwoorden zijn gekoppeld aan deze droom?
                     </h4>
                     <p className="text-xs text-primary/75 pl-5 font-semibold leading-relaxed italic">
                       Gekoppelde reisdoelen: {country.geoKeywords}

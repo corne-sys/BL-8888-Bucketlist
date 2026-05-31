@@ -308,7 +308,7 @@ export default function WorldMap() {
                 {hoveredCountry.continent}
               </span>
               <p className="text-xs text-[#0B192C]/80 mt-2 line-clamp-2 italic">
-                "{hoveredCountry.description}"
+                &quot;{hoveredCountry.description}&quot;
               </p>
               <div className="flex items-center gap-1 mt-3 pt-2 border-t border-primary/5 text-[10px] text-gold font-bold">
                 <Eye className="w-3.5 h-3.5" />
